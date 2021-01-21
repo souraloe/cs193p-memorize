@@ -11,45 +11,36 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
-        Grid (viewModel.cards) { card in
-            CardView(card: card).onTapGesture {
-                viewModel.choose(card: card)
-            }
-            .padding(5)
-        }
-            .padding()
-            .foregroundColor(.orange)
-    }
-}
-
-struct CardView : View {
-    var card: MemoryGame<String>.Card
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                if card.isFaceUp {
-                    RoundedRectangle(cornerRadius: cornerRadius).fill(Color.white)
-                    RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: edgeLineWidth)
-                    Text(card.content)
-                } else {
-                    if !card.isMatched {
-                        RoundedRectangle(cornerRadius: cornerRadius).fill()
-                    }
+        VStack {
+            HeaderView(themeName: viewModel.theme.name, scores: viewModel.scores)
+            Grid (viewModel.cards) { card in
+                CardView(card: card).onTapGesture {
+                    viewModel.choose(card: card)
                 }
+                .padding(self.cardsPadding)
             }
-            .font(Font.system(size: min(geometry.size.width, geometry.size.height) * fontScaleFactor))
+            .padding()
+            .foregroundColor(viewModel.theme.color)
+            Button(newGameTitle, action: onNewGame)
+                .font(Font.system(size: newGameFontSize))
         }
+    }
+    
+    private func onNewGame() {
+        viewModel.startNewGame(style: randomStyle())
+    }
+    
+    private func randomStyle() -> ThemeStyle {
+        let randomIndex = Int.random(in: 0..<ThemeStyle.allCases.count)
+        return ThemeStyle.allCases[randomIndex]
     }
     
     // MARK: - Drawing Constants
     
-    let cornerRadius: CGFloat = 10.0
-    let edgeLineWidth: CGFloat = 3
-    let fontScaleFactor: CGFloat = 0.75
+    let newGameFontSize: CGFloat = 20
+    let cardsPadding: CGFloat = 5
+    let newGameTitle = "New Game"
 }
-
-
 
 
 

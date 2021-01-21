@@ -8,11 +8,25 @@
 import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
-    @Published private(set) var model: MemoryGame<String> = createMemoryGame()
+    @Published private(set) var model: MemoryGame<String>
+    private var themeSwitcher = ThemeSwitcher()
+    var theme: GameTheme<String> {
+        themeSwitcher.currentTheme
+    }
     
-    static func createMemoryGame() -> MemoryGame<String> {
-        let emojis = ["👻", "🎃", "🕷", "👁", "🏈"]
-        return MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 2...5)) { pairIndex in
+    internal init() {
+        self.themeSwitcher = ThemeSwitcher()
+        self.model = EmojiMemoryGame.createMemoryGame(theme: themeSwitcher.currentTheme)
+    }
+    
+    func startNewGame(style: ThemeStyle) {
+        self.themeSwitcher.currentStyle = style
+        self.model = EmojiMemoryGame.createMemoryGame(theme: themeSwitcher.currentTheme)
+    }
+    
+    static func createMemoryGame(theme: GameTheme<String>) -> MemoryGame<String> {
+        let emojis = theme.cards
+        return MemoryGame<String>(numberOfPairsOfCards: theme.numberOfPairsOfCards) { pairIndex in
             return emojis[pairIndex]
         }
     }
@@ -21,6 +35,10 @@ class EmojiMemoryGame: ObservableObject {
     
     var cards: [MemoryGame<String>.Card] {
         model.cards
+    }
+    
+    var scores: Int {
+        model.scores
     }
     
     // MARK: - Intent(s)
