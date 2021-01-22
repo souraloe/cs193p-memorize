@@ -15,7 +15,9 @@ struct EmojiMemoryGameView: View {
             HeaderView(themeName: viewModel.theme.name, scores: viewModel.scores)
             Grid (viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
-                    viewModel.choose(card: card)
+                    withAnimation(.linear(duration: 0.75)) {
+                        viewModel.choose(card: card)
+                    }
                 }
                 .padding(self.cardsPadding)
             }
@@ -27,7 +29,9 @@ struct EmojiMemoryGameView: View {
     }
     
     private func onNewGame() {
-        viewModel.startNewGame(style: randomStyle())
+        withAnimation(.easeInOut) {
+            viewModel.startNewGame(style: randomStyle())
+        }
     }
     
     private func randomStyle() -> ThemeStyle {
@@ -37,11 +41,10 @@ struct EmojiMemoryGameView: View {
     
     // MARK: - Drawing Constants
     
-    let newGameFontSize: CGFloat = 20
-    let cardsPadding: CGFloat = 5
-    let newGameTitle = "New Game"
+    private let newGameFontSize: CGFloat = 20
+    private let cardsPadding: CGFloat = 5
+    private let newGameTitle = "New Game"
 }
-
 
 
 
@@ -56,6 +59,8 @@ struct EmojiMemoryGameView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiMemoryGameView(viewModel: EmojiMemoryGame())
+        let game = EmojiMemoryGame()
+        game.choose(card: game.cards[0])
+        return EmojiMemoryGameView(viewModel: game)
     }
 }

@@ -19,7 +19,12 @@ struct ThemeSwitcher {
     init() {
         for style in ThemeStyle.allCases {
             let content = ThemeStyle.cardsFor(style)
-            allThemes.append(GameTheme<String>(name: style.rawValue, cards: content, numberOfPairsOfCards: content.count, color: ThemeStyle.colorFor(style)))
+            allThemes.append(GameTheme<String>(
+                                name: style.rawValue,
+                                cards: content,
+                                numberOfPairsOfCards: Int.random(in: 2...content.count),
+                                color: ThemeStyle.colorFor(style))
+            )
         }
         currentStyle = .animals
     }

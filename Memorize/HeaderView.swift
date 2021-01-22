@@ -12,8 +12,8 @@ struct HeaderView : View {
     var scores: Int
     var body: some View {
         HStack {
-            Text("Theme: \(themeName)")
-                .font(.subheadline)
+            Text("\(themeName)")
+                .font(.headline)
             Spacer()
             Text("Scores: \(scores)")
                 .font(.subheadline)

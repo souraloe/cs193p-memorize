@@ -24,31 +24,21 @@ enum ThemeStyle: String, CaseIterable {
     
     static func cardsFor(_ style: ThemeStyle) -> [String] {
         switch style {
-        case .halloween:
-            return ["👻", "🎃", "🕷", "👁", "👹"]
-        case .animals:
-            return ["🐶", "🐒", "🐢", "🦍", "🦥"]
-        case .flags:
-            return ["🏁", "🇫🇴", "🇺🇦", "🇨🇰", "🇯🇵"]
-        case .travel:
-            return ["🚊", "⛵️", "🛵", "🚖", "🚂"]
-        case .food:
-            return ["🍉", "🍌", "🥐", "🥟", "🍔"]
+        case .halloween: return ["👻", "🎃", "🕷", "👁", "👹"]
+        case .animals: return ["🐶", "🐒", "🐢", "🦍", "🦥"]
+        case .flags: return ["🏁", "🇫🇴", "🇺🇦", "🇨🇰", "🇯🇵"]
+        case .travel: return ["🚊", "⛵️", "🛵", "🚖", "🚂"]
+        case .food: return ["🍉", "🍌", "🥐", "🥟", "🍔"]
         }
     }
     
     static func colorFor(_ style: ThemeStyle) -> Color {
         switch style {
-        case .halloween:
-            return .orange
-        case .animals:
-            return .purple
-        case .flags:
-            return .blue
-        case .travel:
-            return .yellow
-        case .food:
-            return .red
+        case .halloween: return .orange
+        case .animals: return .purple
+        case .flags: return .blue
+        case .travel: return .yellow
+        case .food: return .red
         }
     }
 }
