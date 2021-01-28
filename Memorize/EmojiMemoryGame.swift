@@ -22,6 +22,7 @@ class EmojiMemoryGame: ObservableObject {
     func startNewGame(style: ThemeStyle) {
         self.themeSwitcher.currentStyle = style
         self.model = EmojiMemoryGame.createMemoryGame(theme: themeSwitcher.currentTheme)
+        print("Creating new game with theme: \(String(data: theme.json!, encoding: .utf8)!)")
     }
     
     static private func createMemoryGame(theme: GameTheme<String>) -> MemoryGame<String> {

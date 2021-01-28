@@ -5,14 +5,17 @@
 //  Created by Vlad Ovcharov on 20.01.2021.
 //
 
-import Foundation
 import SwiftUI
 
-struct GameTheme<CardContent> {
+struct GameTheme<CardContent>: Codable where CardContent: Codable {
     var name: String
     var cards: [CardContent]
     var numberOfPairsOfCards: Int
-    var color: Color
+    var color: UIColor.RGB
+    
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    }
 }
 
 enum ThemeStyle: String, CaseIterable {
@@ -32,13 +35,17 @@ enum ThemeStyle: String, CaseIterable {
         }
     }
     
-    static func colorFor(_ style: ThemeStyle) -> Color {
+    static func colorFor(_ style: ThemeStyle) -> UIColor.RGB {
         switch style {
-        case .halloween: return .orange
-        case .animals: return .purple
-        case .flags: return .blue
-        case .travel: return .yellow
-        case .food: return .red
+        case .halloween: return UIColor.orange.rgb
+        case .animals: return UIColor.purple.rgb
+        case .flags: return UIColor.blue.rgb
+        case .travel: return UIColor.yellow.rgb
+        case .food: return UIColor.red.rgb
         }
     }
+}
+
+enum ThemeColor: String, Codable {
+    case orange, purple, blue, yellow, red
 }
