@@ -9,10 +9,15 @@ import SwiftUI
 
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
+    var theme: GameTheme
     
     var body: some View {
         VStack {
-            HeaderView(themeName: viewModel.theme.name, scores: viewModel.scores)
+            HStack {
+                Text("Scores: \(viewModel.scores)")
+                Spacer()
+            }
+            .padding(.horizontal, scoresPadding)
             Grid (viewModel.cards) { card in
                 CardView(card: card).onTapGesture {
                     withAnimation(.linear(duration: 0.75)) {
@@ -22,21 +27,19 @@ struct EmojiMemoryGameView: View {
                 .padding(self.cardsPadding)
             }
             .padding()
-            .foregroundColor(Color(viewModel.theme.color))
+            .foregroundColor(Color(self.theme.color))
             Button(newGameTitle, action: onNewGame)
                 .font(Font.system(size: newGameFontSize))
+        }
+        .onAppear {
+            viewModel.startNewGame(theme: theme)
         }
     }
     
     private func onNewGame() {
         withAnimation(.easeInOut) {
-            viewModel.startNewGame(style: randomStyle())
+            viewModel.startNewGame(theme: theme)
         }
-    }
-    
-    private func randomStyle() -> ThemeStyle {
-        let randomIndex = Int.random(in: 0..<ThemeStyle.allCases.count)
-        return ThemeStyle.allCases[randomIndex]
     }
     
     // MARK: - Drawing Constants
@@ -44,23 +47,5 @@ struct EmojiMemoryGameView: View {
     private let newGameFontSize: CGFloat = 20
     private let cardsPadding: CGFloat = 5
     private let newGameTitle = "New Game"
-}
-
-
-
-
-
-
-
-
-
-
-
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        let game = EmojiMemoryGame()
-        game.choose(card: game.cards[0])
-        return EmojiMemoryGameView(viewModel: game)
-    }
+    private let scoresPadding: CGFloat = 20
 }

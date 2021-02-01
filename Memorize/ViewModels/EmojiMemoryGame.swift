@@ -9,23 +9,16 @@ import SwiftUI
 
 class EmojiMemoryGame: ObservableObject {
     @Published private(set) var model: MemoryGame<String>
-    private var themeSwitcher = ThemeSwitcher()
-    var theme: GameTheme<String> {
-        themeSwitcher.currentTheme
+    
+    internal init(theme: GameTheme) {
+        self.model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }
     
-    internal init() {
-        self.themeSwitcher = ThemeSwitcher()
-        self.model = EmojiMemoryGame.createMemoryGame(theme: themeSwitcher.currentTheme)
+    func startNewGame(theme: GameTheme) {
+        self.model = EmojiMemoryGame.createMemoryGame(theme: theme)
     }
     
-    func startNewGame(style: ThemeStyle) {
-        self.themeSwitcher.currentStyle = style
-        self.model = EmojiMemoryGame.createMemoryGame(theme: themeSwitcher.currentTheme)
-        print("Creating new game with theme: \(String(data: theme.json!, encoding: .utf8)!)")
-    }
-    
-    static private func createMemoryGame(theme: GameTheme<String>) -> MemoryGame<String> {
+    static private func createMemoryGame(theme: GameTheme) -> MemoryGame<String> {
         let emojis = theme.cards
         return MemoryGame<String>(numberOfPairsOfCards: theme.numberOfPairsOfCards) { pairIndex in
             return emojis[pairIndex]
