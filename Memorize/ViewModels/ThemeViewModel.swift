@@ -10,8 +10,8 @@ import Combine
 import SwiftUI
 
 final class ThemeViewModel: ObservableObject {
-    @Published var themes: [GameTheme] = []
-    
+    @Published var themes: [GameTheme]
+        
     private var autosaveCancellable: AnyCancellable?
     
     init() {
@@ -26,6 +26,12 @@ final class ThemeViewModel: ObservableObject {
             let dataToSave = try? JSONEncoder().encode(themes)
             UserDefaults.standard.set(dataToSave!, forKey: defaultKey)
         })
+    }
+    
+    func update(theme: GameTheme) {
+        if let index = self.themes.firstIndex(where: {$0.id == theme.id}) {
+            self.themes[index] = theme
+        }
     }
     
     private static func defaultThemes() -> [GameTheme] {

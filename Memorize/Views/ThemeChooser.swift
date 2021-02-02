@@ -22,39 +22,26 @@ struct ThemeChooser: View {
                 ForEach (self.themesStore.themes) { theme in
                     NavigationLink(destination: EmojiMemoryGameView(viewModel: EmojiMemoryGame(theme: theme), theme: theme)
                                     .navigationTitle(theme.name)) {
-                        ThemeItem(theme: theme, editMode: self.$editMode)
+                        ThemeItem(theme: theme, isEditing: self.editMode.isEditing)
+                            .environmentObject(self.themesStore)
                     }
                 }
             }
             .navigationBarTitle("Memorize")
             .navigationBarItems(
                 leading: Button(action: {
-                    
+                    self.themesStore.themes.append(GameTheme(
+                        name: "New Theme",
+                        cards: ["😀", "🙁", "😱"],
+                        numberOfPairsOfCards: 3,
+                        color: UIColor.gray.rgb
+                    ))
                 }, label: {
                     Image(systemName: "plus").imageScale(.large)
                 }),
                 trailing: EditButton()
             )
             .environment(\.editMode, $editMode)
-        }
-    }
-}
-
-struct ThemeItem: View {
-    var theme: GameTheme
-    @Binding var editMode: EditMode
-    
-    var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(theme.name)
-                    .font(.title2)
-                Text(theme.cards.joined())
-            }
-            Spacer()
-            RoundedRectangle(cornerRadius: 10)
-                .fill(Color(theme.color))
-                .frame(width: 40, height: 40)
         }
     }
 }

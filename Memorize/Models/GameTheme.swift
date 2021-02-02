@@ -22,7 +22,7 @@ struct GameTheme: Codable, Identifiable {
         self.id = id ?? UUID()
         self.name = name
         self.cards = cards
-        self.numberOfPairsOfCards = numberOfPairsOfCards
+        self.numberOfPairsOfCards = cards.count
         self.color = color
     }
     
